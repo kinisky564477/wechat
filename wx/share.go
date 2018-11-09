@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/zjxpcyc/wechat/core"
+	"github.com/kinisky564477/wechat/core"
 )
 
 // JsTicketTask 刷新 任务

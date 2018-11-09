@@ -3,7 +3,7 @@ package wx
 import (
 	"net/http"
 
-	"github.com/zjxpcyc/wechat/core"
+	"github.com/kinisky564477/wechat/core"
 )
 
 // API 接口列表

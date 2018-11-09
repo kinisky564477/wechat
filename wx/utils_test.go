@@ -3,17 +3,8 @@ package wx_test
 import (
 	"testing"
 
-	"github.com/zjxpcyc/wechat/wx"
+	"github.com/kinisky564477/wechat/wx"
 )
-
-func TestRandomString(t *testing.T) {
-	res1 := wx.RandomString(6)
-	res2 := wx.RandomString(6)
-
-	if res1 == res2 {
-		t.Fatalf("TestRandomString fail-%v", res1, res2)
-	}
-}
 
 func TestJsTicketSignature(t *testing.T) {
 	url := "http://mp.weixin.qq.com?params=value"

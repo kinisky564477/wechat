@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/zjxpcyc/wechat/core"
+	"github.com/kinisky564477/wechat/core"
 )
 
 // CDATA CDATA

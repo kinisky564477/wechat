@@ -6,7 +6,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/zjxpcyc/wechat/core"
+	"github.com/kinisky564477/wechat/core"
 )
 
 var log core.Log
@@ -31,7 +31,7 @@ type Client struct {
 // NewClient 初始客户端
 func NewClient(certificate map[string]string) *Client {
 	cli := &Client{
-		request:     core.NewDefaultRequest(checkJSONResult),
+		request:     core.NewDefaultRequest(CheckJSONResult),
 		kernel:      core.NewKernel(),
 		certificate: certificate,
 	}

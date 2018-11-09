@@ -6,10 +6,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zjxpcyc/wechat/core"
+	"github.com/kinisky564477/wechat/core"
 )
 
-func checkJSONResult(res map[string]interface{}) error {
+// CheckJSONResult 验证返回参数是否为json
+func CheckJSONResult(res map[string]interface{}) error {
 	log.Info("接口返回结果: ", res)
 
 	errcode, _ := res["errcode"]

@@ -3,7 +3,7 @@ package core_test
 import (
 	"testing"
 
-	"github.com/zjxpcyc/wechat/core"
+	"github.com/kinisky564477/wechat/core"
 )
 
 func TestParse(t *testing.T) {
