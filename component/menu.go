@@ -1,4 +1,4 @@
-package wx
+package component
 
 import (
 	"bytes"
@@ -6,13 +6,13 @@ import (
 )
 
 // RefreshMenu 刷新菜单
-func (t *Client) RefreshMenu(menu []byte) error {
+func (t *WxClient) RefreshMenu(menu []byte) error {
 	log.Info("准备刷新菜单")
 	log.Info("接收到菜单信息:", string(menu))
 
 	api := API["menu"]["delete"]
 	params := url.Values{}
-	params.Set("access_token", t.accessToken)
+	params.Set("access_token", t.authorizerAccessToken)
 
 	_, err := t.request.Do(api, params)
 	if err != nil {
@@ -22,7 +22,7 @@ func (t *Client) RefreshMenu(menu []byte) error {
 
 	api = API["menu"]["create"]
 	params = url.Values{}
-	params.Set("access_token", t.accessToken)
+	params.Set("access_token", t.authorizerAccessToken)
 
 	_, err = t.request.Do(api, params, bytes.NewBuffer(menu))
 	if err != nil {
@@ -36,12 +36,12 @@ func (t *Client) RefreshMenu(menu []byte) error {
 }
 
 // GetMenu 获取菜单
-func (t *Client) GetMenu() (map[string]interface{}, error) {
+func (t *WxClient) GetMenu() (map[string]interface{}, error) {
 	log.Info("准备获取菜单")
 
 	api := API["menu"]["get"]
 	params := url.Values{}
-	params.Set("access_token", t.accessToken)
+	params.Set("access_token", t.authorizerAccessToken)
 
 	res, err := t.request.Do(api, params)
 	if err != nil {
@@ -49,5 +49,5 @@ func (t *Client) GetMenu() (map[string]interface{}, error) {
 		return nil, err
 	}
 
-	return res, err
+	return res, nil
 }

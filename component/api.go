@@ -36,4 +36,39 @@ var API = map[string]map[string]core.API{
 			ResponseType: "json",
 		},
 	},
+	"menu": map[string]core.API{
+		"create": core.API{
+			Method:       http.MethodPost,
+			URI:          "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN",
+			ResponseType: "json",
+		},
+		"delete": core.API{
+			Method:       http.MethodGet,
+			URI:          "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN",
+			ResponseType: "json",
+		},
+		"get": core.API{
+			Method:       http.MethodGet,
+			URI:          "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN",
+			ResponseType: "json",
+		},
+	},
+	// 获取素材列表
+	"material": map[string]core.API{
+		"count": core.API{
+			Method:       http.MethodGet,
+			URI:          "https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=ACCESS_TOKEN",
+			ResponseType: "json",
+		},
+		"list": core.API{
+			Method:       http.MethodPost,
+			URI:          "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=ACCESS_TOKEN",
+			ResponseType: "json",
+		},
+		"add": core.API{
+			Method:       http.MethodPost,
+			URI:          "https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=ACCESS_TOKEN&type=TYPE",
+			ResponseType: "json",
+		},
+	},
 }

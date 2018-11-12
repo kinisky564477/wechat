@@ -1,6 +1,8 @@
 package component
 
 import (
+	"errors"
+
 	"github.com/kinisky564477/wechat/core"
 	"github.com/kinisky564477/wechat/wx"
 )
@@ -61,4 +63,12 @@ func (t *ComponentClient) GetToken() string {
 // GetCertificate 获取参数
 func (t *ComponentClient) GetCertificate() map[string]string {
 	return t.certificate
+}
+
+// GetWxClient 获取微信client
+func (t *ComponentClient) GetWxClient(appid string) (*WxClient, error) {
+	if len(t.wxClients) > 0 && t.wxClients[appid] != nil {
+		return t.wxClients[appid], nil
+	}
+	return nil, errors.New("没有对应的微信信息！")
 }

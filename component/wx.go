@@ -2,7 +2,6 @@ package component
 
 import (
 	"github.com/kinisky564477/wechat/core"
-	"github.com/kinisky564477/wechat/wx"
 )
 
 // WxClient 微信客户端
@@ -34,7 +33,7 @@ type WxClient struct {
 func NewWxClient(certificate map[string]string, getComponentToken func() string, getComponentCertificate func() map[string]string) *WxClient {
 	cli := &WxClient{
 		certificate:             certificate,
-		request:                 core.NewDefaultRequest(wx.CheckJSONResult),
+		request:                 core.NewDefaultRequest(CheckJSONResult),
 		kernel:                  core.NewKernel(),
 		authorizerAccessToken:   certificate["authorizer_access_token"],
 		authorizerRefreshToken:  certificate["authorizer_refresh_token"],
