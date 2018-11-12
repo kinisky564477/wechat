@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/kinisky564477/wechat/core"
-	"github.com/kinisky564477/wechat/wx"
 )
 
 var log core.Log
@@ -29,7 +28,7 @@ type ComponentClient struct {
 func NewComponentClient(certificate map[string]string) *ComponentClient {
 	cli := &ComponentClient{
 		certificate: certificate,
-		request:     core.NewDefaultRequest(wx.CheckJSONResult),
+		request:     core.NewDefaultRequest(CheckJSONResult),
 		kernel:      core.NewKernel(),
 	}
 
@@ -71,4 +70,14 @@ func (t *ComponentClient) GetWxClient(appid string) (*WxClient, error) {
 		return t.wxClients[appid], nil
 	}
 	return nil, errors.New("没有对应的微信信息！")
+}
+
+// SetLogInst 设置全局日志实例
+func SetLogInst(l core.Log) {
+	core.SetLogInst(l)
+	log = l
+}
+
+func init() {
+	log = &core.DefaultLogger{}
 }
