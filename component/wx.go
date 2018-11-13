@@ -13,6 +13,7 @@ type WxClient struct {
 	request                 core.Request
 	getComponentToken       func() string
 	getComponentCertificate func() map[string]string
+	reflashToken            func(map[string]string)
 
 	/*
 	* certificate key 值如下:
@@ -30,7 +31,7 @@ type WxClient struct {
 }
 
 // NewWxClient 初始客户端
-func NewWxClient(certificate map[string]string, getComponentToken func() string, getComponentCertificate func() map[string]string) *WxClient {
+func NewWxClient(certificate map[string]string, getComponentToken func() string, getComponentCertificate func() map[string]string, reflashToken func(map[string]string)) *WxClient {
 	cli := &WxClient{
 		certificate:             certificate,
 		request:                 core.NewDefaultRequest(CheckJSONResult),
@@ -40,6 +41,7 @@ func NewWxClient(certificate map[string]string, getComponentToken func() string,
 		authorizationCode:       certificate["authorization_code"],
 		getComponentToken:       getComponentToken,
 		getComponentCertificate: getComponentCertificate,
+		reflashToken:            reflashToken,
 	}
 
 	if cli.authorizerRefreshToken == "" {

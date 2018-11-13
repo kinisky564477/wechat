@@ -23,6 +23,16 @@ func (t *WxClient) RefreshToken() time.Duration {
 
 	t.authorizerAccessToken = token
 	t.authorizerRefreshToken = refreshToken
+
+	if t.reflashToken != nil {
+		var c = map[string]string{
+			"token":        token,
+			"refreshToken": refreshToken,
+			"appid":        t.certificate["appid"],
+		}
+		t.reflashToken(c)
+	}
+
 	return time.Duration(expire) * time.Second
 }
 
@@ -31,10 +41,12 @@ func (t *WxClient) getToken() (string, string, int64, error) {
 	params := url.Values{}
 	params.Set("component_access_token", t.getComponentToken())
 
+	type wxTokenParams struct {
+	}
 	p := TokenParams{
 		ComponentAppid:        t.certificate["appid"],
 		ComponentAppsecret:    t.certificate["secret"],
-		ComponentVerifyTicket: t.certificate["componentVerifyTicket"],
+		ComponentVerifyTicket: t.getComponentToken(),
 	}
 
 	d, err := json.Marshal(p)
