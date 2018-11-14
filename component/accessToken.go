@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"net/url"
 	"time"
-
-	"github.com/astaxie/beego"
 )
 
 // ComponentAccessTokenTask 刷新令牌
@@ -17,7 +15,7 @@ func (t *ComponentClient) ComponentAccessTokenTask() time.Duration {
 		log.Error("获取 Component-Access-Token 失败", err.Error())
 		expire = reTrySec
 	}
-	beego.Error("刷新令牌")
+	log.Error("刷新令牌")
 
 	// 不允许连续不断调用
 	if expire == 0 {
@@ -39,7 +37,7 @@ type TokenParams struct {
 func (t *ComponentClient) getComponentToken() (string, int64, error) {
 	api := API["component_token"]["post"]
 	params := url.Values{}
-	beego.Error("获取token:", api)
+	log.Error("获取token:", api)
 	p := TokenParams{
 		ComponentAppid:        t.certificate["appid"],
 		ComponentAppsecret:    t.certificate["secret"],
@@ -56,7 +54,7 @@ func (t *ComponentClient) getComponentToken() (string, int64, error) {
 	if err != nil {
 		return "", 0, err
 	}
-	beego.Error("获取token返回值为:", res)
+	log.Error("获取token返回值为:", res)
 	token, _ := res["component_access_token"].(string)
 	expire, _ := res["expires_in"].(float64)
 	return token, int64(expire), nil
