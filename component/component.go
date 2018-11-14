@@ -3,6 +3,8 @@ package component
 import (
 	"errors"
 
+	"github.com/astaxie/beego"
+
 	"github.com/kinisky564477/wechat/core"
 )
 
@@ -31,7 +33,7 @@ func NewComponentClient(certificate map[string]string) *ComponentClient {
 		request:     core.NewDefaultRequest(CheckJSONResult),
 		kernel:      core.NewKernel(),
 	}
-
+	beego.Error("初始化客户端：", cli)
 	cli.kernel.SetTask("component-token", cli.ComponentAccessTokenTask)
 	cli.kernel.StartTask("component-token")
 
