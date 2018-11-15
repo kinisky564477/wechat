@@ -63,11 +63,13 @@ func (t *ComponentClient) getComponentToken() (string, int64, error) {
 
 	d, err := json.Marshal(p)
 	if err != nil {
+		beego.Error("转换获取token参数失败:", err)
 		log.Error("转换获取token参数失败,", err)
 		return "", 0, err
 	}
 	res, err := t.request.Do(api, params, bytes.NewBuffer(d))
 	if err != nil {
+		beego.Error("转换获取token参数失败:", err)
 		return "", 0, err
 	}
 	beego.Error("获取token:", res)
