@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/url"
+
+	"github.com/astaxie/beego"
 )
 
 // AuthorizerToken 获取授权
@@ -15,8 +17,9 @@ func (t *WxClient) AuthorizerToken() error {
 		ComponentAppid    string `json:"component_appid"`
 		AuthorizationCode string `json:"authorization_code"`
 	}
+	beego.Error("第三方appid", t.getComponentCertificate()["appid"])
 	p := authParam{
-		ComponentAppid:    t.certificate["appid"],
+		ComponentAppid:    t.getComponentCertificate()["appid"],
 		AuthorizationCode: t.authorizationCode,
 	}
 	d, err := json.Marshal(p)
@@ -24,6 +27,7 @@ func (t *WxClient) AuthorizerToken() error {
 		log.Error("转换授权码参数失败,", err)
 		return err
 	}
+	beego.Error(d)
 	res, err := t.request.Do(api, params, bytes.NewBuffer(d))
 	if err != nil {
 		log.Error("获取授权信息失败：", err.Error())

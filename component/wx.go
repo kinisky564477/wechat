@@ -1,6 +1,7 @@
 package component
 
 import (
+	"github.com/astaxie/beego"
 	"github.com/kinisky564477/wechat/core"
 )
 
@@ -47,7 +48,7 @@ func NewWxClient(certificate map[string]string, getComponentToken func() string,
 	if cli.authorizerRefreshToken == "" {
 		err := cli.AuthorizerToken()
 		if err != nil {
-			log.Error("微信客户端授权失败：", err)
+			beego.Error("微信客户端授权失败：", err)
 			return nil
 		}
 	}

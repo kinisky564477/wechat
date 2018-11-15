@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/astaxie/beego"
+
 	"github.com/kinisky564477/wechat/core"
 )
 
@@ -29,12 +31,14 @@ type ComponentClient struct {
 
 // NewComponentClient 初始客户端
 func NewComponentClient(certificate map[string]string, updateToken func(map[string]interface{})) *ComponentClient {
+	var wxclients map[string]*WxClient
 	cli := &ComponentClient{
 		certificate:           certificate,
 		request:               core.NewDefaultRequest(CheckJSONResult),
 		kernel:                core.NewKernel(),
 		componentVerifyTicket: certificate["componentVerifyTicket"],
 		updateToken:           updateToken,
+		wxClients:             wxclients,
 	}
 	d := certificate["d"]
 	if d == "" {
@@ -58,9 +62,12 @@ func (t *ComponentClient) RefreshTicket(ticket string) {
 
 // AppendWxClient 添加wxclient
 func (t *ComponentClient) AppendWxClient(wxClient *WxClient) {
+	beego.Error(wxClient)
+	appid := wxClient.certificate["appid"]
+	beego.Error(appid)
 	if t.wxClients == nil {
 		t.wxClients = map[string]*WxClient{
-			wxClient.certificate["appid"]: wxClient,
+			appid: wxClient,
 		}
 	} else {
 		t.wxClients[wxClient.certificate["appid"]] = wxClient
