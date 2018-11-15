@@ -16,7 +16,7 @@ type ComponentClient struct {
 	componentAccessToken  string
 	request               core.Request
 	kernel                *core.Kernel
-	updateToken           func(map[string]string)
+	updateToken           func(map[string]interface{})
 
 	/*
 	* certificate key 值如下:
@@ -28,7 +28,7 @@ type ComponentClient struct {
 }
 
 // NewComponentClient 初始客户端
-func NewComponentClient(certificate map[string]string, updateToken func(map[string]string)) *ComponentClient {
+func NewComponentClient(certificate map[string]string, updateToken func(map[string]interface{})) *ComponentClient {
 	cli := &ComponentClient{
 		certificate:           certificate,
 		request:               core.NewDefaultRequest(CheckJSONResult),
