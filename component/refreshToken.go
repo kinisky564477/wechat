@@ -27,10 +27,11 @@ func (t *WxClient) RefreshToken() time.Duration {
 	t.authorizerRefreshToken = refreshToken
 
 	if t.reflashToken != nil {
-		var c = map[string]string{
+		var c = map[string]interface{}{
 			"token":        token,
 			"refreshToken": refreshToken,
 			"appid":        t.certificate["appid"],
+			"expire_in":    expire,
 		}
 		t.reflashToken(c)
 	}
@@ -48,9 +49,8 @@ type WxTokenParams struct {
 func (t *WxClient) getToken() (string, string, int64, error) {
 	api := API["refresh_access_token"]["post"]
 	params := url.Values{}
-	params.Set("component_access_token", t.getComponentToken())
 
-	beego.Error("获取token的微信信息：", t)
+	params.Set("component_access_token", t.getComponentToken())
 
 	p := WxTokenParams{
 		ComponentAppid:         t.getComponentCertificate()["appid"],
@@ -60,15 +60,17 @@ func (t *WxClient) getToken() (string, string, int64, error) {
 
 	d, err := json.Marshal(p)
 	if err != nil {
-		log.Error("转换获取token参数失败,", err)
+		beego.Error("转换获取token参数失败,", err)
 		return "", "", 0, err
 	}
 
 	res, err := t.request.Do(api, params, bytes.NewBuffer(d))
 	if err != nil {
+		beego.Error("刷新失败：", err)
 		return "", "", 0, err
 	}
 
+	beego.Error("刷新token返回值:", res)
 	token, _ := res["authorizer_access_token"].(string)
 	refreshToken, _ := res["authorizer_refresh_token"].(string)
 	expire, _ := res["expires_in"].(float64)

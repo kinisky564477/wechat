@@ -32,7 +32,7 @@ var API = map[string]map[string]core.API{
 	"refresh_access_token": map[string]core.API{
 		"post": core.API{
 			Method:       http.MethodPost,
-			URI:          "https:// api.weixin.qq.com /cgi-bin/component/api_authorizer_token?component_access_token=COMPONENT_ACCESS_TOKEN",
+			URI:          "https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=COMPONENT_ACCESS_TOKEN",
 			ResponseType: "json",
 		},
 	},
