@@ -27,13 +27,13 @@ type ComponentClient struct {
 // NewComponentClient 初始客户端
 func NewComponentClient(certificate map[string]string) *ComponentClient {
 	cli := &ComponentClient{
-		certificate: certificate,
-		request:     core.NewDefaultRequest(CheckJSONResult),
-		kernel:      core.NewKernel(),
+		certificate:           certificate,
+		request:               core.NewDefaultRequest(CheckJSONResult),
+		kernel:                core.NewKernel(),
+		componentVerifyTicket: certificate["componentVerifyTicket"],
 	}
 	cli.kernel.SetTask("component-token", cli.ComponentAccessTokenTask)
 	cli.kernel.StartTask("component-token")
-
 	return cli
 }
 
