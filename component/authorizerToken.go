@@ -33,8 +33,10 @@ func (t *WxClient) AuthorizerToken() error {
 		log.Error("获取授权信息失败：", err.Error())
 		return err
 	}
-	t.authorizerAccessToken = res["authorizer_access_token"].(string)
-	t.authorizerRefreshToken = res["authorizer_refresh_token"].(string)
-	t.authorizerResult = res
+	authorizationInfo := res["authorization_info"].(map[string]interface{})
+
+	t.authorizerAccessToken = authorizationInfo["authorizer_access_token"].(string)
+	t.authorizerRefreshToken = authorizationInfo["authorizer_refresh_token"].(string)
+	t.authorizerResult = authorizationInfo
 	return nil
 }
