@@ -45,7 +45,9 @@ func NewComponentClient(certificate map[string]string, updateToken func(map[stri
 		dely = 0
 	}
 	cli.kernel.SetTask("component-token", cli.ComponentAccessTokenTask)
-	cli.kernel.StartTask("component-token", time.Duration(dely))
+
+	//
+	cli.kernel.StartTask("component-token", time.Duration(dely)*time.Second)
 	return cli
 }
 
