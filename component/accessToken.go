@@ -18,8 +18,6 @@ func (t *ComponentClient) ComponentAccessTokenTask() time.Duration {
 		log.Error("获取 Component-Access-Token 失败", err.Error())
 		expire = reTrySec
 	}
-	beego.Error(token)
-	beego.Error("刷新令牌")
 
 	// 不允许连续不断调用
 	if expire == 0 {
@@ -27,6 +25,13 @@ func (t *ComponentClient) ComponentAccessTokenTask() time.Duration {
 	}
 
 	t.componentAccessToken = token
+	if t.updateToken != nil {
+		var c = map[string]string{
+			"token":   token,
+			"expires": string(expire),
+		}
+		t.updateToken(c)
+	}
 	return time.Duration(expire) * time.Second
 }
 

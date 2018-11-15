@@ -2,6 +2,8 @@ package component
 
 import (
 	"errors"
+	"strconv"
+	"time"
 
 	"github.com/kinisky564477/wechat/core"
 )
@@ -14,6 +16,7 @@ type ComponentClient struct {
 	componentAccessToken  string
 	request               core.Request
 	kernel                *core.Kernel
+	updateToken           func(map[string]string)
 
 	/*
 	* certificate key 值如下:
@@ -25,15 +28,24 @@ type ComponentClient struct {
 }
 
 // NewComponentClient 初始客户端
-func NewComponentClient(certificate map[string]string) *ComponentClient {
+func NewComponentClient(certificate map[string]string, updateToken func(map[string]string)) *ComponentClient {
 	cli := &ComponentClient{
 		certificate:           certificate,
 		request:               core.NewDefaultRequest(CheckJSONResult),
 		kernel:                core.NewKernel(),
 		componentVerifyTicket: certificate["componentVerifyTicket"],
+		updateToken:           updateToken,
+	}
+	d := certificate["d"]
+	if d == "" {
+		d = "0"
+	}
+	dely, _ := strconv.Atoi(d)
+	if dely < 0 {
+		dely = 0
 	}
 	cli.kernel.SetTask("component-token", cli.ComponentAccessTokenTask)
-	cli.kernel.StartTask("component-token")
+	cli.kernel.StartTask("component-token", time.Duration(dely))
 	return cli
 }
 
