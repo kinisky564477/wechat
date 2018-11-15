@@ -36,6 +36,13 @@ var API = map[string]map[string]core.API{
 			ResponseType: "json",
 		},
 	},
+	"wechat": map[string]core.API{
+		"getinfo": core.API{
+			Method:       http.MethodPost,
+			URI:          "https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_info?component_access_token=COMPONENT_ACCESS_TOKEN",
+			ResponseType: "json",
+		},
+	},
 	"menu": map[string]core.API{
 		"create": core.API{
 			Method:       http.MethodPost,

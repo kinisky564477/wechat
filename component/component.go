@@ -39,8 +39,9 @@ func NewComponentClient(certificate map[string]string, updateToken func(map[stri
 		componentVerifyTicket: certificate["componentVerifyTicket"],
 		updateToken:           updateToken,
 		wxClients:             wxclients,
+		componentAccessToken:  certificate["token"],
 	}
-	d := certificate["d"]
+	d := certificate["expires_in"]
 	if d == "" {
 		d = "0"
 	}
@@ -62,15 +63,18 @@ func (t *ComponentClient) RefreshTicket(ticket string) {
 
 // AppendWxClient 添加wxclient
 func (t *ComponentClient) AppendWxClient(wxClient *WxClient) {
-	beego.Error(wxClient)
-	appid := wxClient.certificate["appid"]
-	beego.Error(appid)
-	if t.wxClients == nil {
-		t.wxClients = map[string]*WxClient{
-			appid: wxClient,
+	if wxClient != nil {
+		appid := wxClient.certificate["appid"]
+		beego.Error(appid)
+		if t.wxClients == nil {
+			t.wxClients = map[string]*WxClient{
+				appid: wxClient,
+			}
+		} else {
+			t.wxClients[wxClient.certificate["appid"]] = wxClient
 		}
 	} else {
-		t.wxClients[wxClient.certificate["appid"]] = wxClient
+		beego.Error("添加WxClient失败，WxClient为空！")
 	}
 }
 

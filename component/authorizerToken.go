@@ -12,6 +12,7 @@ import (
 func (t *WxClient) AuthorizerToken() error {
 	api := API["authorizer_access_token"]["post"]
 	params := url.Values{}
+	beego.Error(t.getComponentToken())
 	params.Set("component_access_token", t.getComponentToken())
 	type authParam struct {
 		ComponentAppid    string `json:"component_appid"`
