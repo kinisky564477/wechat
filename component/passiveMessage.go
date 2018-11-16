@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/astaxie/beego"
+
 	"github.com/kinisky564477/wechat/core"
 )
 
@@ -96,15 +98,15 @@ func (t *WxClient) TransformMessage(msg string) (map[string]string, error) {
 // ResponseMessageText 回复文本消息
 func (t *WxClient) ResponseMessageText(to, message string) ([]byte, error) {
 	log.Info("(被动)待反馈文本消息: ", fmt.Sprintf("%s", message))
-
+	beego.Error(to)
 	data := PassiveMessageText{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["wxid"]},
+		FromUserName: CDATA{t.certificate["appid"]},
 		MsgType:      CDATA{"text"},
 		CreateTime:   time.Now().Local().Unix(),
 		Content:      CDATA{message},
 	}
-
+	beego.Error(data)
 	return t.getXMLStringOfMessage(data)
 }
 
@@ -114,7 +116,7 @@ func (t *WxClient) ResponseMessageImage(to, media string) ([]byte, error) {
 
 	data := PassiveMessageImage{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["wxid"]},
+		FromUserName: CDATA{t.certificate["appid"]},
 		MsgType:      CDATA{"image"},
 		CreateTime:   time.Now().Local().Unix(),
 		MediaID:      CDATA{media},
@@ -129,7 +131,7 @@ func (t *WxClient) ResponseMessageVoice(to, media string) ([]byte, error) {
 
 	data := PassiveMessageVoice{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["wxid"]},
+		FromUserName: CDATA{t.certificate["appid"]},
 		MsgType:      CDATA{"voice"},
 		CreateTime:   time.Now().Local().Unix(),
 		MediaID:      CDATA{media},
@@ -144,7 +146,7 @@ func (t *WxClient) ResponseMessageVideo(to, media, title, desc string) ([]byte, 
 
 	data := PassiveMessageVideo{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["wxid"]},
+		FromUserName: CDATA{t.certificate["appid"]},
 		MsgType:      CDATA{"video"},
 		CreateTime:   time.Now().Local().Unix(),
 		MediaID:      CDATA{media},
@@ -172,7 +174,7 @@ func (t *WxClient) ResponseMessageMusic(to, music, title, desc string, others ..
 
 	data := PassiveMessageMusic{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["wxid"]},
+		FromUserName: CDATA{t.certificate["appid"]},
 		MsgType:      CDATA{"music"},
 		CreateTime:   time.Now().Local().Unix(),
 		Title:        CDATA{title},
@@ -204,7 +206,7 @@ func (t *WxClient) ResponseMessageNews(to string, articles []map[string]string) 
 
 	data := PassiveMessageNews{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["wxid"]},
+		FromUserName: CDATA{t.certificate["appid"]},
 		MsgType:      CDATA{"news"},
 		CreateTime:   time.Now().Local().Unix(),
 		ArticleCount: num,

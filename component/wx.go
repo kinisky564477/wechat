@@ -58,3 +58,7 @@ func NewWxClient(certificate map[string]string, getComponentToken func() string,
 
 	return cli
 }
+
+func (t *WxClient) GetToken() string {
+	return t.authorizerAccessToken
+}
