@@ -78,6 +78,15 @@ func (t *ComponentClient) AppendWxClient(wxClient *WxClient) {
 	}
 }
 
+// DelWxClient 删除wxclient
+func (t *ComponentClient) DelWxClient(appid string) {
+	wxclient := t.wxClients[appid]
+	if wxclient != nil {
+		wxclient.kernel.StopTask("refresh-token")
+		delete(t.wxClients, appid)
+	}
+}
+
 // GetToken 获取token
 func (t *ComponentClient) GetToken() string {
 	return t.componentAccessToken

@@ -57,6 +57,13 @@ func (t *Kernel) StartTask(id string, delay ...time.Duration) {
 	}
 }
 
+// StopTask 关闭任务
+func (t *Kernel) StopTask(id string) {
+	if schedule, ok := t.schedules[id]; ok {
+		schedule.Stop()
+	}
+}
+
 // SetLogInst 设置全局日志实例
 func SetLogInst(l Log) {
 	log = l
