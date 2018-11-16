@@ -60,13 +60,37 @@ func (t *WxClient) GetMaterialCount() (map[string]interface{}, error) {
 
 // AddMaterial 新增永久素材
 func (t *WxClient) AddMaterial(pars []byte, mtype string) (map[string]interface{}, error) {
-	api := API["material"]["count"]
+	api := API["material"]["add"]
 	params := url.Values{}
 	params.Set("access_token", t.authorizerAccessToken)
 	params.Set("type", mtype)
 	res, err := t.request.Do(api, params, bytes.NewBuffer(pars))
 	if err != nil {
 		log.Error("新增永久素材失败：", err.Error())
+		return nil, err
+	}
+	return res, nil
+}
+
+// DelMaterial 删除永久素材
+func (t *WxClient) DelMaterial(media_id string) (map[string]interface{}, error) {
+	api := API["material"]["del"]
+	params := url.Values{}
+	params.Set("access_token", t.authorizerAccessToken)
+	type delMatherial struct {
+		MediaID string `json:"media_id"`
+	}
+	p := delMatherial{
+		MediaID: media_id,
+	}
+	d, err := json.Marshal(p)
+	if err != nil {
+		log.Error("转换删除素材参数失败,", err)
+		return nil, err
+	}
+	res, err := t.request.Do(api, params, bytes.NewBuffer(d))
+	if err != nil {
+		log.Error("删除永久素材失败：", err.Error())
 		return nil, err
 	}
 	return res, nil

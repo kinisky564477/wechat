@@ -77,5 +77,10 @@ var API = map[string]map[string]core.API{
 			URI:          "https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=ACCESS_TOKEN&type=TYPE",
 			ResponseType: "json",
 		},
+		"del": core.API{
+			Method:       http.MethodPost,
+			URI:          "https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=ACCESS_TOKEN",
+			ResponseType: "json",
+		},
 	},
 }
