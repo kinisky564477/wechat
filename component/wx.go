@@ -59,6 +59,12 @@ func NewWxClient(certificate map[string]string, getComponentToken func() string,
 	return cli
 }
 
+// GetToken 获取token
 func (t *WxClient) GetToken() string {
 	return t.authorizerAccessToken
+}
+
+// GetAppID 获取 appid
+func (t *WxClient) GetAppID() string {
+	return t.certificate["appid"]
 }

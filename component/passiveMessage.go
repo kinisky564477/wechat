@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/astaxie/beego"
-
 	"github.com/kinisky564477/wechat/core"
 )
 
@@ -96,27 +94,27 @@ func (t *WxClient) TransformMessage(msg string) (map[string]string, error) {
 }
 
 // ResponseMessageText 回复文本消息
-func (t *WxClient) ResponseMessageText(to, message string) ([]byte, error) {
+func (t *WxClient) ResponseMessageText(from, to, message string) ([]byte, error) {
 	log.Info("(被动)待反馈文本消息: ", fmt.Sprintf("%s", message))
-	beego.Error(to)
+
 	data := PassiveMessageText{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["appid"]},
+		FromUserName: CDATA{from},
 		MsgType:      CDATA{"text"},
 		CreateTime:   time.Now().Local().Unix(),
 		Content:      CDATA{message},
 	}
-	beego.Error(data)
+
 	return t.getXMLStringOfMessage(data)
 }
 
 // ResponseMessageImage 回复图片消息
-func (t *WxClient) ResponseMessageImage(to, media string) ([]byte, error) {
+func (t *WxClient) ResponseMessageImage(from, to, media string) ([]byte, error) {
 	log.Info("(被动)待反馈图片消息: ", fmt.Sprintf("%s", media))
 
 	data := PassiveMessageImage{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["appid"]},
+		FromUserName: CDATA{from},
 		MsgType:      CDATA{"image"},
 		CreateTime:   time.Now().Local().Unix(),
 		MediaID:      CDATA{media},
@@ -126,12 +124,12 @@ func (t *WxClient) ResponseMessageImage(to, media string) ([]byte, error) {
 }
 
 // ResponseMessageVoice 回复音频消息
-func (t *WxClient) ResponseMessageVoice(to, media string) ([]byte, error) {
+func (t *WxClient) ResponseMessageVoice(from, to, media string) ([]byte, error) {
 	log.Info("(被动)待反馈音频消息: ", fmt.Sprintf("音频ID %s", media))
 
 	data := PassiveMessageVoice{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["appid"]},
+		FromUserName: CDATA{from},
 		MsgType:      CDATA{"voice"},
 		CreateTime:   time.Now().Local().Unix(),
 		MediaID:      CDATA{media},
@@ -141,12 +139,12 @@ func (t *WxClient) ResponseMessageVoice(to, media string) ([]byte, error) {
 }
 
 // ResponseMessageVideo 回复视频消息
-func (t *WxClient) ResponseMessageVideo(to, media, title, desc string) ([]byte, error) {
+func (t *WxClient) ResponseMessageVideo(from, to, media, title, desc string) ([]byte, error) {
 	log.Info("(被动)待反馈视频消息: ", fmt.Sprintf("视频ID %s , 标题 %s , 描述 %s ", media, title, desc))
 
 	data := PassiveMessageVideo{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["appid"]},
+		FromUserName: CDATA{from},
 		MsgType:      CDATA{"video"},
 		CreateTime:   time.Now().Local().Unix(),
 		MediaID:      CDATA{media},
@@ -158,7 +156,7 @@ func (t *WxClient) ResponseMessageVideo(to, media, title, desc string) ([]byte, 
 }
 
 // ResponseMessageMusic 回复音乐消息
-func (t *WxClient) ResponseMessageMusic(to, music, title, desc string, others ...string) ([]byte, error) {
+func (t *WxClient) ResponseMessageMusic(from, to, music, title, desc string, others ...string) ([]byte, error) {
 	log.Info("(被动)待反馈音乐消息: ", fmt.Sprintf("音乐 %s , 标题 %s , 描述 %s, 其他: %v ", music, title, desc, others))
 
 	othLen := len(others)
@@ -174,7 +172,7 @@ func (t *WxClient) ResponseMessageMusic(to, music, title, desc string, others ..
 
 	data := PassiveMessageMusic{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["appid"]},
+		FromUserName: CDATA{from},
 		MsgType:      CDATA{"music"},
 		CreateTime:   time.Now().Local().Unix(),
 		Title:        CDATA{title},
@@ -188,7 +186,7 @@ func (t *WxClient) ResponseMessageMusic(to, music, title, desc string, others ..
 }
 
 // ResponseMessageNews 回复图文消息
-func (t *WxClient) ResponseMessageNews(to string, articles []map[string]string) ([]byte, error) {
+func (t *WxClient) ResponseMessageNews(from, to string, articles []map[string]string) ([]byte, error) {
 	log.Info("(被动)待反馈图文消息: ", fmt.Sprintf("%v", articles))
 
 	num := len(articles)
@@ -206,7 +204,7 @@ func (t *WxClient) ResponseMessageNews(to string, articles []map[string]string) 
 
 	data := PassiveMessageNews{
 		ToUserName:   CDATA{to},
-		FromUserName: CDATA{t.certificate["appid"]},
+		FromUserName: CDATA{from},
 		MsgType:      CDATA{"news"},
 		CreateTime:   time.Now().Local().Unix(),
 		ArticleCount: num,

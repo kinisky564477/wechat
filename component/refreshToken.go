@@ -26,7 +26,7 @@ func (t *WxClient) RefreshToken() time.Duration {
 	t.authorizerAccessToken = token
 	t.authorizerRefreshToken = refreshToken
 
-	if t.reflashToken != nil {
+	if t.reflashToken != nil && t.authorizerRefreshToken != "" {
 		var c = map[string]interface{}{
 			"token":        token,
 			"refreshToken": refreshToken,

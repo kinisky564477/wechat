@@ -14,9 +14,7 @@ import (
 	"io"
 	"net/http"
 	"sort"
-	"strconv"
 	"strings"
-	"time"
 )
 
 // 用于微信消息的加解密
@@ -127,6 +125,8 @@ func (w messageCrypter) encrypt(text string) (string, error) {
 		return "", err
 	}
 
+	randBytes = []byte(`LAccRRyuraD7OPZl`)
+
 	messageBytes := bytes.Join([][]byte{randBytes, msgLen, message, []byte(w.appID)}, nil)
 
 	encoded := fillEncode(messageBytes)
@@ -168,7 +168,7 @@ func fillEncode(text []byte) []byte {
 
 // 包装读写接口 使其能读写加解密
 type IOCipher interface {
-	Encrypt(w io.Writer, b []byte) (err error)
+	Encrypt(w io.Writer, b []byte, nonce, timestamp string) (err error)
 	Decrypt(r io.Reader) (b []byte, err error)
 	CheckSign(w http.ResponseWriter, r *http.Request) bool
 	CheckSignQuery(w http.ResponseWriter, r *http.Request) bool
@@ -217,22 +217,24 @@ type cipherToWX struct {
 	Nonce        charData
 }
 
-// 将b加密写入w
-func (c *Cipher) Encrypt(w io.Writer, b []byte) (err error) {
+// Encrypt 将b加密写入w
+func (c *Cipher) Encrypt(w io.Writer, b []byte, nonce, timestamp string) (err error) {
 	result, err := c.messageCrypter.encrypt(string(b))
 	if err != nil {
 		return
 	}
-	nonce := createNonceStr(16)
+
 	to := &cipherToWX{
 		Encrypt:   newCharData(result),
-		TimeStamp: strconv.FormatInt(time.Now().Unix(), 10),
+		TimeStamp: timestamp,
 		Nonce:     newCharData(nonce),
 	}
 
 	// timestamp, nonce, encryptedMsg string)
-	to.MsgSignature = newCharData(MsgSign(c.token, to.TimeStamp, nonce, result))
-	err = xml.NewEncoder(w).Encode(to)
+	to.MsgSignature = newCharData(MsgSign(c.token, timestamp, nonce, result))
+	enc := xml.NewEncoder(w)
+	enc.Indent("\n", "")
+	err = enc.Encode(to)
 	return
 }
 
@@ -242,7 +244,7 @@ type cipherFromWX struct {
 	Encrypt    string
 }
 
-// 从r读取并解密
+// Decrypt 从r读取并解密
 func (c *Cipher) Decrypt(r io.Reader) (b []byte, err error) {
 	from := &cipherFromWX{}
 	err = xml.NewDecoder(r).Decode(from)

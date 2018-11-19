@@ -83,4 +83,12 @@ var API = map[string]map[string]core.API{
 			ResponseType: "json",
 		},
 	},
+	// 客服消息
+	"custom": map[string]core.API{
+		"message": core.API{
+			Method:       http.MethodPost,
+			URI:          "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN",
+			ResponseType: "json",
+		},
+	},
 }
