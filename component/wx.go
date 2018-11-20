@@ -64,6 +64,11 @@ func (t *WxClient) GetToken() string {
 	return t.authorizerAccessToken
 }
 
+// GetAuthCode 获取授权码
+func (t *WxClient) GetAuthCode() string {
+	return t.authorizationCode
+}
+
 // GetAppID 获取 appid
 func (t *WxClient) GetAppID() string {
 	return t.certificate["appid"]
