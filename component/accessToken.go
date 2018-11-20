@@ -49,8 +49,8 @@ func (t *ComponentClient) getComponentToken() (string, int64, error) {
 	api := API["component_token"]["post"]
 	params := url.Values{}
 
-	beego.Error("ticket:", t.certificate["componentVerifyTicket"])
-	if t.certificate["componentVerifyTicket"] == "" {
+	beego.Error("ticket:", t.componentVerifyTicket)
+	if t.componentVerifyTicket == "" {
 		log.Error("请等待ticket返回！")
 		return "", 0, errors.New("请等待ticket返回！")
 	}
@@ -58,7 +58,7 @@ func (t *ComponentClient) getComponentToken() (string, int64, error) {
 	p := TokenParams{
 		ComponentAppid:        t.certificate["appid"],
 		ComponentAppsecret:    t.certificate["secret"],
-		ComponentVerifyTicket: t.certificate["componentVerifyTicket"],
+		ComponentVerifyTicket: t.componentVerifyTicket,
 	}
 
 	beego.Error("tokenParams:", p)
