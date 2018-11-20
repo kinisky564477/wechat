@@ -23,36 +23,41 @@ type PassiveMessageText struct {
 	Content      CDATA    `xml:"Content"`
 }
 
+// MediaMessage 图片
+type MediaMessage struct {
+	MediaID CDATA `xml:"MediaId"`
+}
+
 // PassiveMessageImage 图片
 type PassiveMessageImage struct {
-	XMLName      xml.Name `xml:"xml"`
-	ToUserName   CDATA    `xml:"ToUserName"`
-	FromUserName CDATA    `xml:"FromUserName"`
-	CreateTime   int64    `xml:"CreateTime"`
-	MsgType      CDATA    `xml:"MsgType"`
-	MediaID      CDATA    `xml:"MediaId"`
+	XMLName      xml.Name     `xml:"xml"`
+	ToUserName   CDATA        `xml:"ToUserName"`
+	FromUserName CDATA        `xml:"FromUserName"`
+	CreateTime   int64        `xml:"CreateTime"`
+	MsgType      CDATA        `xml:"MsgType"`
+	Image        MediaMessage `xml:"Image"`
 }
 
 // PassiveMessageVoice 语音
 type PassiveMessageVoice struct {
-	XMLName      xml.Name `xml:"xml"`
-	ToUserName   CDATA    `xml:"ToUserName"`
-	FromUserName CDATA    `xml:"FromUserName"`
-	CreateTime   int64    `xml:"CreateTime"`
-	MsgType      CDATA    `xml:"MsgType"`
-	MediaID      CDATA    `xml:"MediaId"`
+	XMLName      xml.Name     `xml:"xml"`
+	ToUserName   CDATA        `xml:"ToUserName"`
+	FromUserName CDATA        `xml:"FromUserName"`
+	CreateTime   int64        `xml:"CreateTime"`
+	MsgType      CDATA        `xml:"MsgType"`
+	Voice        MediaMessage `xml:"Voice"`
 }
 
 // PassiveMessageVideo 视频
 type PassiveMessageVideo struct {
-	XMLName      xml.Name `xml:"xml"`
-	ToUserName   CDATA    `xml:"ToUserName"`
-	FromUserName CDATA    `xml:"FromUserName"`
-	CreateTime   int64    `xml:"CreateTime"`
-	MsgType      CDATA    `xml:"MsgType"`
-	MediaID      CDATA    `xml:"MediaId"`
-	Title        CDATA    `xml:"Title"`
-	Description  CDATA    `xml:"Description"`
+	XMLName      xml.Name     `xml:"xml"`
+	ToUserName   CDATA        `xml:"ToUserName"`
+	FromUserName CDATA        `xml:"FromUserName"`
+	CreateTime   int64        `xml:"CreateTime"`
+	MsgType      CDATA        `xml:"MsgType"`
+	Title        CDATA        `xml:"Title"`
+	Description  CDATA        `xml:"Description"`
+	Video        MediaMessage `xml:"Video"`
 }
 
 // PassiveMessageMusic 音乐
@@ -112,12 +117,16 @@ func (t *WxClient) ResponseMessageText(from, to, message string) ([]byte, error)
 func (t *WxClient) ResponseMessageImage(from, to, media string) ([]byte, error) {
 	log.Info("(被动)待反馈图片消息: ", fmt.Sprintf("%s", media))
 
+	img := MediaMessage{
+		MediaID: CDATA{media},
+	}
+
 	data := PassiveMessageImage{
 		ToUserName:   CDATA{to},
 		FromUserName: CDATA{from},
 		MsgType:      CDATA{"image"},
 		CreateTime:   time.Now().Local().Unix(),
-		MediaID:      CDATA{media},
+		Image:        img,
 	}
 
 	return t.getXMLStringOfMessage(data)
@@ -127,12 +136,16 @@ func (t *WxClient) ResponseMessageImage(from, to, media string) ([]byte, error) 
 func (t *WxClient) ResponseMessageVoice(from, to, media string) ([]byte, error) {
 	log.Info("(被动)待反馈音频消息: ", fmt.Sprintf("音频ID %s", media))
 
+	voice := MediaMessage{
+		MediaID: CDATA{media},
+	}
+
 	data := PassiveMessageVoice{
 		ToUserName:   CDATA{to},
 		FromUserName: CDATA{from},
 		MsgType:      CDATA{"voice"},
 		CreateTime:   time.Now().Local().Unix(),
-		MediaID:      CDATA{media},
+		Voice:        voice,
 	}
 
 	return t.getXMLStringOfMessage(data)
@@ -141,13 +154,15 @@ func (t *WxClient) ResponseMessageVoice(from, to, media string) ([]byte, error) 
 // ResponseMessageVideo 回复视频消息
 func (t *WxClient) ResponseMessageVideo(from, to, media, title, desc string) ([]byte, error) {
 	log.Info("(被动)待反馈视频消息: ", fmt.Sprintf("视频ID %s , 标题 %s , 描述 %s ", media, title, desc))
-
+	video := MediaMessage{
+		MediaID: CDATA{media},
+	}
 	data := PassiveMessageVideo{
 		ToUserName:   CDATA{to},
 		FromUserName: CDATA{from},
 		MsgType:      CDATA{"video"},
 		CreateTime:   time.Now().Local().Unix(),
-		MediaID:      CDATA{media},
+		Video:        video,
 		Title:        CDATA{title},
 		Description:  CDATA{desc},
 	}
