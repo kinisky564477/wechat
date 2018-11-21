@@ -26,8 +26,14 @@ func CheckJSONResult(res map[string]interface{}) error {
 		return nil
 	}
 
-	msg, _ := errmsg.(string)
-	log.Error("接口返回错误: " + strconv.Itoa(errNum) + "-" + msg)
+	var msg string
+	if v, ok := WxErrors[strconv.Itoa(errNum)]; ok {
+		msg = v
+	} else {
+		msg, _ = errmsg.(string)
+	}
+
+	log.Error("接口返回错误: " + strconv.Itoa(errNum) + "-" + errmsg.(string))
 	return errors.New(strconv.Itoa(errNum) + "-" + msg)
 }
 
