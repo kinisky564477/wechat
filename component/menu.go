@@ -20,18 +20,19 @@ func (t *WxClient) RefreshMenu(menu []byte) error {
 		return err
 	}
 
-	api = API["menu"]["create"]
-	params = url.Values{}
-	params.Set("access_token", t.authorizerAccessToken)
+	if string(menu) != "" {
+		api = API["menu"]["create"]
+		params = url.Values{}
+		params.Set("access_token", t.authorizerAccessToken)
 
-	_, err = t.request.Do(api, params, bytes.NewBuffer(menu))
-	if err != nil {
-		log.Error("创建菜单失败", err.Error())
-		return err
+		_, err = t.request.Do(api, params, bytes.NewBuffer(menu))
+		if err != nil {
+			log.Error("创建菜单失败", err.Error())
+			return err
+		}
+
+		log.Info("创建菜单成功")
 	}
-
-	log.Info("创建菜单成功")
-
 	return nil
 }
 
